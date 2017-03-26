@@ -7,7 +7,8 @@
 <body>
 <h2><a href="index.html">Home</a></h2>
 <h2>Моя еда</h2>
-<table border="1" align="center" frame="void" width="80%">
+<a href="meals?action=insert">Добавить еду</a><br/>
+<table border="1" align="left" frame="void" width="80%">
     <thead>
     <tr>
         <th>Дата и время</th>
@@ -21,6 +22,8 @@
             <td><c:out value="${meal.dateTime}"/></td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
+            <td><a href="meals?action=edit&id=<c:out value="${meal.id}"/>">Обновить</a></td>
+            <td><a href="meals?action=delete&id=<c:out value="${meal.id}"/>">Удалить</a></td>
         </tr>
     </c:forEach>
     </tbody>
