@@ -19,6 +19,14 @@
 <section>
     <h2><a href="index.html">Home</a></h2>
     <h2>Meal list</h2>
+    <form method="post" action="meals">
+        <input type="hidden" name="filter" value="filter">
+        Start Date: <input type="date" value="" name="startDate"><br/>
+        End Date: <input type="date" value="" name="endDate"><br/>
+        Start Time: <input type="time" value="" name="startTime"><br/>
+        End Time: <input type="time" value="" name="endTime"><br/>
+        <button type="submit">Filter</button>
+    </form>
     <a href="meals?action=create">Add Meal</a>
     <hr>
     <table border="1" cellpadding="8" cellspacing="0">
@@ -32,7 +40,7 @@
         </tr>
         </thead>
         <c:forEach items="${meals}" var="meal">
-            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
                         <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
