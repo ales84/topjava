@@ -60,7 +60,7 @@ public class MealsUtil {
                 );
 
         return meals.stream()
-                .filter(meal -> DateTimeUtil.isBetweenDate(meal.getDate(), startDate, endDate) && DateTimeUtil.isBetweenTime(meal.getTime(), startTime, endTime))
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate) && DateTimeUtil.isBetween(meal.getTime(), startTime, endTime))
                 .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
