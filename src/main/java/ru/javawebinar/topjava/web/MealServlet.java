@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.util.DateTimeUtil;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletConfig;
@@ -29,6 +27,7 @@ public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
 
     private ConfigurableApplicationContext appCtx;
+
     private MealRestController mealRestController;
 
     @Override
@@ -45,7 +44,7 @@ public class MealServlet extends HttpServlet {
         String filter = request.getParameter("filter");
 
         if (filter != null) {
-            request.setAttribute("meals",mealRestController.getFilteredWithExceeded(
+            request.setAttribute("meals", mealRestController.getFilteredWithExceeded(
                     request.getParameter("startDate"),
                     request.getParameter("endDate"),
                     request.getParameter("startTime"),
