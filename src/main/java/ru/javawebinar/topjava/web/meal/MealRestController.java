@@ -26,12 +26,12 @@ public class MealRestController {
 
     public List<MealWithExceed> getAllWithExceeded() {
         LOG.info("getAllWithExceeded");
-        return MealsUtil.getWithExceeded(service.getAll(), AuthorizedUser.getCaloriesPerDay());
+        return MealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()), AuthorizedUser.getCaloriesPerDay());
     }
 
     public List<MealWithExceed> getFilteredWithExceeded(String startDate, String endDate, String startTime, String endTime) {
         LOG.info("getFilteredWithExceeded");
-        return MealsUtil.getFilteredWithExceeded(service.getAll(),
+        return MealsUtil.getFilteredWithExceeded(service.getAll(AuthorizedUser.id()),
                 startDate.isEmpty() ? LocalDate.MIN : LocalDate.parse(startDate),
                 endDate.isEmpty() ? LocalDate.MAX : LocalDate.parse(endDate),
                 startTime.isEmpty() ? LocalTime.MIN : LocalTime.parse(startTime),
@@ -41,29 +41,29 @@ public class MealRestController {
 
     public List<Meal> getAll() {
         LOG.info("getAll");
-        return service.getAll();
+        return service.getAll(AuthorizedUser.id());
     }
 
     public Meal get(int id) {
         LOG.info("get " + id);
-        return service.get(id);
+        return service.get(AuthorizedUser.id(), id);
     }
 
     public Meal create(Meal meal) {
         LOG.info("create " + meal);
         checkNew(meal);
-        return service.save(meal);
+        return service.save(AuthorizedUser.id(), meal);
     }
 
     public void delete(int id) {
         LOG.info("delete " + id);
-        service.delete(id);
+        service.delete(AuthorizedUser.id(), id);
     }
 
     public void update(Meal meal, int id) {
         LOG.info("update " + meal);
         checkIdConsistent(meal, id);
-        service.update(meal);
+        service.update(AuthorizedUser.id(), meal);
     }
 
 
