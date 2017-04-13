@@ -1,3 +1,5 @@
+[![Dependency Status](https://dependencyci.com/github/ales84/topjava/badge)](https://dependencyci.com/github/ales84/topjava)
+
 Java Enterprise Online Project 
 ===============================
 Наиболее востребованные технологии /инструменты / фреймворки Java Enterprise:
