@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6d2c8baeb0cc4630b1c5c05eb3e62349)](https://www.codacy.com/app/ales84/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ales84/topjava&amp;utm_campaign=Badge_Grade)
 [![Dependency Status](https://dependencyci.com/github/ales84/topjava/badge)](https://dependencyci.com/github/ales84/topjava)
 
 Java Enterprise Online Project 
