@@ -1,7 +1,14 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,12 +34,31 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MealServiceTest.class);
+    private static long startTime;
+
     static {
         SLF4JBridgeHandler.install();
     }
 
     @Autowired
     private MealService service;
+
+    @Rule
+    public final TestName name=new TestName();
+
+    @Rule
+    public final TestRule watchman=new TestWatcher() {
+        @Override
+        protected void starting(Description description) {
+            startTime=System.currentTimeMillis();
+        }
+
+        @Override
+        protected void finished(Description description) {
+            LOG.info(description+" time="+(System.currentTimeMillis()-startTime)+" ms");
+        }
+    };
 
     @Test
     public void testDelete() throws Exception {
