@@ -24,16 +24,12 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     protected UserService service;
 
-    //@Autowired
-    //protected JpaUtil jpaUtil;
-
     @Autowired
     private Environment environment;
 
     @Before
     public void setUp() throws Exception {
         service.evictCache();
-        //jpaUtil.clear2ndLevelHibernateCache();
     }
 
     @Test
