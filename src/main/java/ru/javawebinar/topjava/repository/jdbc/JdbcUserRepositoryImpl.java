@@ -25,8 +25,6 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class JdbcUserRepositoryImpl implements UserRepository {
 
-    private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
-
     private final JdbcTemplate jdbcTemplate;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -68,53 +66,55 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_id WHERE id=?",
-                (ResultSetExtractor<List<User>>) rs -> {
-                    Map<Integer, User> userMap = new HashMap<>();
-                    while (rs.next()) {
-                        Integer userId = rs.getInt("id");
-                        User user = userMap.get(userId);
-                        if (user == null) {
-                            user = new User(
-                                    userId,
-                                    rs.getString("name"),
-                                    rs.getString("email"),
-                                    rs.getString("password"),
-                                    rs.getInt("calories_per_day"),
-                                    rs.getBoolean("enabled"),
-                                    new HashSet<>(Collections.singleton(Role.valueOf(rs.getString("role")))));
-                            user.setRegistered(rs.getDate("registered"));
-                            userMap.put(userId, user);
-                        } else {
-                            Set<Role> roles = user.getRoles();
-                            roles.add(Role.valueOf(rs.getString("role")));
-                            userMap.put(userId, new User(
-                                    user.getId(),
-                                    user.getName(),
-                                    user.getEmail(),
-                                    user.getPassword(),
-                                    user.getCaloriesPerDay(),
-                                    user.isEnabled(),
-                                    roles));
-                        }
-                    }
-                    return new ArrayList<>(userMap.values());
-                }, id);
-/*
-        List<User> users = jdbcTemplate.query(
-                "SELECT * FROM users JOIN user_roles ON users.id = user_roles.user_id WHERE id=?", ROW_MAPPER, id);
-*/
+                new UsersQueryResultSetExtractor(), id);
         return DataAccessUtils.singleResult(users);
     }
 
     @Override
     public User getByEmail(String email) {
-//        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
-        List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
+        List<User> users = jdbcTemplate.query("SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_id WHERE email=?",
+                new UsersQueryResultSetExtractor(), email);
         return DataAccessUtils.singleResult(users);
     }
 
     @Override
     public List<User> getAll() {
-        return jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
+        return jdbcTemplate.query("SELECT * FROM users INNER JOIN user_roles ON users.id = user_roles.user_id ORDER BY name, email",
+                new UsersQueryResultSetExtractor());
+    }
+
+    private class UsersQueryResultSetExtractor implements ResultSetExtractor<List<User>> {
+        @Override
+        public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
+            Map<Integer, User> userMap = new HashMap<>();
+            while (rs.next()) {
+                Integer userId = rs.getInt("id");
+                User user = userMap.get(userId);
+                if (user == null) {
+                    user = new User(
+                            userId,
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getInt("calories_per_day"),
+                            rs.getBoolean("enabled"),
+                            new HashSet<>(Collections.singleton(Role.valueOf(rs.getString("role")))));
+                    user.setRegistered(rs.getDate("registered"));
+                    userMap.put(userId, user);
+                } else {
+                    Set<Role> roles = user.getRoles();
+                    roles.add(Role.valueOf(rs.getString("role")));
+                    userMap.put(userId, new User(
+                            user.getId(),
+                            user.getName(),
+                            user.getEmail(),
+                            user.getPassword(),
+                            user.getCaloriesPerDay(),
+                            user.isEnabled(),
+                            roles));
+                }
+            }
+            return new ArrayList<>(userMap.values());
+        }
     }
 }
