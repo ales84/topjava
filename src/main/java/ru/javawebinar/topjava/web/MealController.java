@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
@@ -28,8 +29,7 @@ public class MealController {
     private MealService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String mealsGet(HttpServletRequest request) {
-        String action = request.getParameter("action");
+    public String mealsGet(@RequestParam(name = "action", required = false) String action, HttpServletRequest request) {
 
         switch (action == null ? "all" : action) {
             case "delete":
@@ -53,8 +53,7 @@ public class MealController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String mealsPost(HttpServletRequest request) {
-        String action = request.getParameter("action");
+    public String mealsPost(@RequestParam(name = "action", required = false) String action, HttpServletRequest request) {
         if (action == null) {
             final Meal meal = new Meal(
                     LocalDateTime.parse(request.getParameter("dateTime")),
