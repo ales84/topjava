@@ -40,3 +40,10 @@ $(function () {
     });
     makeEditable();
 });
+
+function userEnabled(id, enabled) {
+    $.post(ajaxUrl + 'enabled', {id: id, enabled: enabled},
+        function () {
+            updateTable();
+        })
+}
